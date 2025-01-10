@@ -1,0 +1,22 @@
+<html>
+<head>
+	
+</head>
+<body>
+
+<h2>Hello World</h2>
+
+<table>
+	<tr>
+		<td>이름</td>
+		<td>주소</td>
+	</tr>
+	
+	<tr th:each="list:${list}">
+		<td th:text="${list.name}"></td>
+		<td th:text="${list.address}"></td>
+	</tr>
+	
+</table>
+</body>
+</html>

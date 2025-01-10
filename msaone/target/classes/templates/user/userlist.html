@@ -1,0 +1,102 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<body>
+	<div>
+		<h1>리스트호출</h1>
+		<button onclick="fn_getlist()">호출하기</button>
+		<br>
+		<div id="list"></div>
+	</div>
+	<div>
+		<div>아이디</div>
+		<input id="id" type="text" name="id"/>
+	</div>
+	<div>
+		<div>이름</div>
+		<input id="name" type="text" name="name"/>
+	</div>
+		<input type="button" onclick="fn_update()" value="수정">
+		<input type="button" onclick="fn_delete()" value="삭제">
+</body>
+<script>
+	function fn_getlist(){
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:9090/api/list",
+			dataType:"text"
+		})
+		.done(function (result) {
+			console.log(result);
+			var str="";
+			rtn=JSON.parse(result);
+			for(var i=0; i<rtn.length; i++){
+				str = str + "<tr>";
+				str = str + "<td>" + rtn[i].id + "</td>";	
+				str = str + "<td>" + rtn[i].name + "</td>";	
+				str = str + "</tr>";
+			}
+						
+			$("#list").html(str);
+		})
+		.fail(function(jqXHR){
+			console.log(jqXHR);
+		})
+	}
+	
+	function fn_update(){
+		
+		const id = $('#id').val();
+		const name = $('#name').val();
+					
+		if(id == ''){
+			alert('아이디를 입력해주세요');
+			e.preventDefault();
+			}
+		if(name == ''){
+			alert('이름을 입력해주세요');
+			e.preventDefault();
+			}
+					
+		const path = 'http://localhost:9090/api/update';
+		const json = JSON.stringify({
+			'id':id,
+			'name':name
+		})
+		$.ajax({
+			url:path,
+			type:'POST',
+			contentType:'application/json',
+			data:json,
+			})
+			.done(function (result){
+			alert('업데이트 성공');
+			console.log();
+			location.href = "http://localhost:9090/userlist"
+			})
+		}
+					
+	function fn_delete(){
+							
+		const id = $('#id').val();
+										
+		if(id == ''){
+			alert('아이디를 입력해주세요');
+			e.preventDefault();
+			}
+										
+			const path = 'http://localhost:9090/api/delete';
+			const json = JSON.stringify({
+				'id':id,
+			})
+			$.ajax({
+				url:path,
+				type:'POST',
+				contentType:'application/json',
+				data:json,
+				})
+				.done(function (result){
+					alert('삭제 성공');
+					console.log();
+					location.href = "http://localhost:9090/userlist"
+					})
+			}			
+</script>
